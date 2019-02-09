@@ -1,5 +1,6 @@
 # Analysis script: compute values and create graphics of interest
 library("dplyr")
+install.packages("ggplot2")
 library("ggplot2")
 install.packages("lubridate")
 library("lubridate")
@@ -24,11 +25,12 @@ by_zip <- evictions %>%
   ungroup() %>%
   top_n(10, wt = n)
 # Create a plot of the number of evictions each month in the dataset
-by_month <- evictions %>%
-  group_by(
-    month = floor_date(as.Date(File.Date, format = "%m/%d/%y"), unit = "month")
-  ) %>%
-  count()
+by_zip <- evictions %>%
+  group_by(Eviction.Notice.Source.Zipcode) %>%
+  count(sort = T) %>%
+  rename(zipcode = Eviction.Notice.Source.Zipcode, evictions = n) %>% 
+  ungroup() %>% 
+  top_n(10, wt = evictions)
 
 # Store plot in a variable
 ggplot(data = by_month) +
@@ -49,15 +51,7 @@ evictions_2017 <- evictions %>%
   )
 
 # Create a maptile background
-base_plot <- qmplot(
-  data = evictions_2017,        
-  x = long,        
-  y = lat,       
-  geom = "blank",  
-  maptype = "toner-background", 
-  darken = .7,
-  legend = "topleft"            
-)
+
 
 # Add a layer of points on top of the map tiles
 evictions_plot <- 
