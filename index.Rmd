@@ -1,0 +1,19 @@
+---
+title: "Evictions Report"
+author: "Hedy Jiang"
+date: "February 8, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source("analysis.R")
+```
+
+This is my report.
+
+## Geographic analysis
+
+```{r warning=FALSE}
+evictions_plot
+```
